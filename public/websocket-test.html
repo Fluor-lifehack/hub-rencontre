@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test WebSocket - Rencontre Hub</title>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .connected {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .message {
+            background-color: #e2e3e5;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .message-header {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+        .message-content {
+            font-family: monospace;
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-radius: 3px;
+            white-space: pre-wrap;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔌 Test WebSocket - Rencontre Hub</h1>
+
+        <div id="status" class="status disconnected">
+            ❌ Déconnecté
+        </div>
+
+        <div class="form-group">
+            <label for="appKey">Clé de l'application:</label>
+            <input type="text" id="appKey" value="rencontre-hub-key" placeholder="Clé de l'application">
+        </div>
+
+        <div class="form-group">
+            <label for="cluster">Cluster:</label>
+            <input type="text" id="cluster" value="mt1" placeholder="Cluster">
+        </div>
+
+        <div class="form-group">
+            <label for="host">Host:</label>
+            <input type="text" id="host" value="rencontre-hub.ddev.site" placeholder="Host">
+        </div>
+
+        <div class="form-group">
+            <label for="port">Port:</label>
+            <input type="number" id="port" value="8080" placeholder="Port">
+        </div>
+
+        <div class="form-group">
+            <label for="scheme">Schéma:</label>
+            <select id="scheme">
+                <option value="http">HTTP</option>
+                <option value="https">HTTPS</option>
+            </select>
+        </div>
+
+        <button onclick="connect()">🔌 Se connecter</button>
+        <button onclick="disconnect()" id="disconnectBtn" disabled>🔌 Se déconnecter</button>
+        <button onclick="clearMessages()">🗑️ Effacer les messages</button>
+
+        <h2>📨 Messages reçus:</h2>
+        <div id="messages"></div>
+    </div>
+
+    <script>
+        let pusher = null;
+        let channel = null;
+
+        function updateStatus(message, isConnected) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${isConnected ? 'connected' : 'disconnected'}`;
+
+            document.getElementById('disconnectBtn').disabled = !isConnected;
+        }
+
+        function addMessage(title, content) {
+            const messagesEl = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message';
+            messageEl.innerHTML = `
+                <div class="message-header">${title}</div>
+                <div class="message-content">${content}</div>
+            `;
+            messagesEl.insertBefore(messageEl, messagesEl.firstChild);
+        }
+
+        function connect() {
+            if (pusher) {
+                pusher.disconnect();
+            }
+
+            const appKey = document.getElementById('appKey').value;
+            const cluster = document.getElementById('cluster').value;
+            const host = document.getElementById('host').value;
+            const port = document.getElementById('port').value;
+            const scheme = document.getElementById('scheme').value;
+
+            if (!appKey || !host) {
+                alert('Veuillez remplir la clé de l\'application et l\'host');
+                return;
+            }
+
+            updateStatus('🔄 Connexion en cours...', false);
+
+            pusher = new Pusher(appKey, {
+                cluster: cluster,
+                host: host,
+                port: parseInt(port),
+                scheme: scheme,
+                encrypted: scheme === 'https',
+                authEndpoint: '/broadcasting/auth',
+                auth: {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    }
+                }
+            });
+
+            pusher.connection.bind('connected', function() {
+                updateStatus('✅ Connecté au serveur WebSocket', true);
+                addMessage('Connexion', 'Connexion établie avec succès');
+            });
+
+            pusher.connection.bind('disconnected', function() {
+                updateStatus('❌ Déconnecté du serveur WebSocket', false);
+                addMessage('Déconnexion', 'Connexion fermée');
+            });
+
+            pusher.connection.bind('error', function(error) {
+                updateStatus('❌ Erreur de connexion', false);
+                addMessage('Erreur', JSON.stringify(error, null, 2));
+            });
+
+            // S'abonner au canal de notifications générales
+            channel = pusher.subscribe('notifications');
+            channel.bind('pusher:subscription_succeeded', function() {
+                addMessage('Abonnement', 'Abonné au canal "notifications"');
+            });
+
+            // Écouter les événements de test
+            channel.bind('test', function(data) {
+                addMessage('Test Event', JSON.stringify(data, null, 2));
+            });
+
+            // Écouter les événements de match
+            channel.bind('match.found', function(data) {
+                addMessage('Match Found', JSON.stringify(data, null, 2));
+            });
+
+            // Écouter les événements de message
+            channel.bind('message.sent', function(data) {
+                addMessage('Message Sent', JSON.stringify(data, null, 2));
+            });
+        }
+
+        function disconnect() {
+            if (pusher) {
+                pusher.disconnect();
+                pusher = null;
+                channel = null;
+            }
+        }
+
+        function clearMessages() {
+            document.getElementById('messages').innerHTML = '';
+        }
+
+        // Test automatique de connexion au chargement
+        window.addEventListener('load', function() {
+            setTimeout(connect, 1000);
+        });
+    </script>
+</body>
+</html>
