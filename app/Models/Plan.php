@@ -14,6 +14,7 @@ class Plan extends Model
         'duration_days',
         'tag',
         'advantages',
+        'status',
     ];
 
     protected function casts(): array

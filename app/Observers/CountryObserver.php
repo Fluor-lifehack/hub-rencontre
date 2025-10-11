@@ -15,6 +15,11 @@ class CountryObserver
         if (empty($country->uuid)) {
             $country->uuid = Str::uuid();
         }
+
+        // Convertir le code en majuscules
+        if (!empty($country->code)) {
+            $country->code = strtoupper($country->code);
+        }
     }
 
     /**
@@ -30,7 +35,10 @@ class CountryObserver
      */
     public function updating(Country $country): void
     {
-        //
+        // Convertir le code en majuscules lors de la mise à jour
+        if (!empty($country->code)) {
+            $country->code = strtoupper($country->code);
+        }
     }
 
     /**

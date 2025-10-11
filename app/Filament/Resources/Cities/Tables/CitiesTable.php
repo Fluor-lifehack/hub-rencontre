@@ -5,7 +5,9 @@ namespace App\Filament\Resources\Cities\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class CitiesTable
@@ -19,6 +21,8 @@ class CitiesTable
                     ->searchable(),
                 TextColumn::make('name')
                     ->searchable(),
+                ToggleColumn::make('is_active')
+                    ->label('Actif'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -33,7 +37,9 @@ class CitiesTable
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

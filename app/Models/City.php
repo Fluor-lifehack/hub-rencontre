@@ -11,6 +11,7 @@ class City extends Model
     protected $fillable = [
         'country_id',
         'name',
+        'is_active',
     ];
 
     public function country(): BelongsTo

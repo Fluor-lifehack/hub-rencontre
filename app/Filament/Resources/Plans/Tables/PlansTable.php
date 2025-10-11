@@ -5,7 +5,9 @@ namespace App\Filament\Resources\Plans\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class PlansTable
@@ -14,7 +16,6 @@ class PlansTable
     {
         return $table
             ->columns([
-
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('price')
@@ -25,6 +26,8 @@ class PlansTable
                     ->sortable(),
                 TextColumn::make('tag')
                     ->searchable(),
+                ToggleColumn::make('status')
+                    ->label('Actif'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -34,11 +37,14 @@ class PlansTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Countries\Schemas;
 
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class CountryForm
@@ -19,8 +20,11 @@ class CountryForm
                     ->label('Code ISO')
                     ->required()
                     ->length(3)
-                    ->uppercase()
                     ->placeholder('Ex: CIV'),
+                Toggle::make('is_active')
+                    ->label('Pays actif')
+                    ->default(true)
+                    ->helperText('Activer ou désactiver ce pays'),
             ]);
     }
 }

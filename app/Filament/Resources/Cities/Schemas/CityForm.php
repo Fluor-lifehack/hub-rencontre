@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Cities\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class CityForm
@@ -17,6 +18,10 @@ class CityForm
                     ->required(),
                 TextInput::make('name')
                     ->required(),
+                Toggle::make('is_active')
+                    ->label('Ville active')
+                    ->default(true)
+                    ->helperText('Activer ou désactiver cette ville'),
             ]);
     }
 }

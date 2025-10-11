@@ -4,8 +4,11 @@ namespace App\Filament\Resources\Plans\Schemas;
 
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\TagsInput;
+
 
 class PlanForm
 {
@@ -16,10 +19,12 @@ class PlanForm
                 TextInput::make('name')
                     ->label('Nom du plan')
                     ->required()
-                    ->placeholder('Ex: Premium'),
-                Textarea::make('description')
+                    ->placeholder('Ex: Premium')
+                    ->columnSpanFull(),
+                MarkdownEditor::make('description')
                     ->label('Description')
                     ->placeholder('Description du plan...')
+                    ->helperText('Description du plan...')
                     ->columnSpanFull(),
                 TextInput::make('price')
                     ->label('Prix')
@@ -32,9 +37,16 @@ class PlanForm
                     ->required()
                     ->numeric()
                     ->minValue(1),
-                TextInput::make('tag')
+                TagsInput::make('tag')
                     ->label('Tag')
+                    ->columnSpanFull()
+                    ->separator(',')
+                    // ->helperText('Tag du plan (ex: premium, basic, etc.)')
                     ->placeholder('Ex: premium'),
+                Toggle::make('status')
+                    ->label('Plan actif')
+                    ->default(true)
+                    ->helperText('Activer ou désactiver ce plan'),
                 Repeater::make('advantages')
                     ->label('Avantages')
                     ->schema([
