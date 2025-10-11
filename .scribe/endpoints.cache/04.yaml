@@ -697,3 +697,114 @@ endpoints:
     method: null
     route: null
     custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/users/me/likes-received
+    metadata:
+      groupName: Users
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Likes reçus par l'utilisateur
+
+        Récupère la liste des utilisateurs qui ont liké le profil de l'utilisateur authentifié.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: 'Numéro de page.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: "Nombre d'éléments par page (max 50)."
+        required: false
+        example: 15
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      mutual_only:
+        name: mutual_only
+        description: 'Afficher seulement les likes mutuels.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      per_page: 15
+      mutual_only: false
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "data": [
+                {
+                  "id": "uuid-du-like",
+                  "liker_id": "uuid-du-liker",
+                  "compatibility_score": 85,
+                  "is_mutual": false,
+                  "liked_at": "2025-10-11T12:00:00.000000Z",
+                  "liker": {
+                    "id": "uuid-du-liker",
+                    "name": "Marie Dupont",
+                    "profile": {
+                      "bio": "Passionnée de voyage",
+                      "age": 28,
+                      "gender": "female"
+                    }
+                  },
+                  "compatibility_level": "Très élevée",
+                  "time_ago": "il y a 2 heures",
+                  "is_recent": true
+                }
+              ],
+              "current_page": 1,
+              "total": 5
+            }
+          }
+        headers: []
+        description: 'Likes récupérés'
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Non authentifié"
+          }
+        headers: []
+        description: 'Non authentifié'
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

@@ -9,16 +9,18 @@ use App\Filament\Resources\Plans\Schemas\PlanForm;
 use App\Filament\Resources\Plans\Tables\PlansTable;
 use App\Models\Plan;
 use BackedEnum;
+use Filament\Support\Icons\Heroicon;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
+
 use Filament\Tables\Table;
+use UnitEnum;
 
 class PlanResource extends Resource
 {
     protected static ?string $model = Plan::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-credit-card';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::CreditCard;
 
     protected static ?string $navigationLabel = 'Plans';
 
@@ -26,7 +28,7 @@ class PlanResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Plans';
 
-    protected static ?int $navigationSort = 4;
+    protected static string | UnitEnum | null $navigationGroup = 'Settings';
 
     public static function form(Schema $schema): Schema
     {

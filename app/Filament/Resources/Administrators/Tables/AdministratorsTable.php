@@ -20,7 +20,8 @@ class AdministratorsTable
                 TextColumn::make('email')
                     ->searchable(),
                 TextColumn::make('role')
-                    ->searchable(),
+                    ->searchable()
+                    ->formatStateUsing(fn ($state) => ucwords(str_replace('_', ' ', $state))),
                 ToggleColumn::make('is_active'),
                 TextColumn::make('last_login_at')
                     ->dateTime()
@@ -30,6 +31,7 @@ class AdministratorsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

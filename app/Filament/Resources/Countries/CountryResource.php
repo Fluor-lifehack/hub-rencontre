@@ -9,6 +9,8 @@ use App\Filament\Resources\Countries\Schemas\CountryForm;
 use App\Filament\Resources\Countries\Tables\CountriesTable;
 use App\Models\Country;
 use BackedEnum;
+use UnitEnum;
+
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -25,8 +27,10 @@ class CountryResource extends Resource
     protected static ?string $modelLabel = 'Pays';
 
     protected static ?string $pluralModelLabel = 'Pays';
+    protected static string | UnitEnum | null $navigationGroup = 'Settings';
 
-    protected static ?int $navigationSort = 3;
+
+
 
     public static function form(Schema $schema): Schema
     {
