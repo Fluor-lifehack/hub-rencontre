@@ -132,16 +132,16 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID de la photo.'
+        description: 'UUID de la photo.'
         required: true
-        example: 1
-        type: integer
+        example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: 3fe609a4-a037-4dab-adca-6c8e94a242c4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -211,16 +211,16 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID de la photo.'
+        description: 'UUID de la photo.'
         required: true
-        example: 1
-        type: integer
+        example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: 3fe609a4-a037-4dab-adca-6c8e94a242c4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -296,16 +296,16 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID de la photo.'
+        description: 'UUID de la photo.'
         required: true
-        example: 1
-        type: integer
+        example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: 3fe609a4-a037-4dab-adca-6c8e94a242c4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

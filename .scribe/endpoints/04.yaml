@@ -353,16 +353,16 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "ID de l'utilisateur."
+        description: "UUID de l'utilisateur."
         required: true
-        example: 1
-        type: integer
+        example: 40e35362-0215-45df-8afe-293778cb6ec7
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: 40e35362-0215-45df-8afe-293778cb6ec7
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -425,7 +425,6 @@ endpoints:
   -
     httpMethods:
       - PUT
-      - PATCH
     uri: 'api/v1/users/{id}'
     metadata:
       groupName: Users
@@ -446,16 +445,16 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: "ID de l'utilisateur."
+        description: "UUID de l'utilisateur."
         required: true
-        example: 1
-        type: integer
+        example: 40e35362-0215-45df-8afe-293778cb6ec7
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: 40e35362-0215-45df-8afe-293778cb6ec7
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -635,16 +634,16 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/users/{id}'
+    uri: api/v1/users/me
     metadata:
       groupName: Users
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Supprimer un utilisateur
+        Supprimer son propre compte
 
-        Supprime un utilisateur et son profil (soft delete).
+        Supprime le compte de l'utilisateur authentifié (soft delete).
       description: ''
       authenticated: false
       deprecated: false
@@ -652,19 +651,8 @@ endpoints:
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: "ID de l'utilisateur."
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -676,10 +664,20 @@ endpoints:
         content: |-
           {
             "success": true,
-            "message": "Utilisateur supprimé avec succès"
+            "message": "Votre compte a été supprimé avec succès"
           }
         headers: []
-        description: 'Utilisateur supprimé'
+        description: 'Compte supprimé'
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+            "success": false,
+            "message": "Vous ne pouvez supprimer que votre propre compte"
+          }
+        headers: []
+        description: 'Accès refusé'
         custom: []
       -
         status: 404

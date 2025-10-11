@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Profile;
-use App\Models\Country;
 use App\Models\City;
+use App\Models\Country;
+use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class MassiveUserSeeder extends Seeder
@@ -21,7 +21,7 @@ class MassiveUserSeeder extends Seeder
         // Créer 500 utilisateurs supplémentaires avec des emails vraiment uniques
         for ($i = 0; $i < 500; $i++) {
             User::factory()->create([
-                'email' => 'user_' . uniqid() . '_' . $i . '@example.com',
+                'email' => 'user_'.uniqid().'_'.$i.'@example.com',
             ]);
         }
 
@@ -36,6 +36,222 @@ class MassiveUserSeeder extends Seeder
         $this->createInternationalProfiles();
 
         $this->command->info('Création terminée !');
+    }
+
+    /**
+     * Generate phone number with country code
+     */
+    private function generatePhoneNumberWithCountryCode(string $countryCode = 'FR'): string
+    {
+        $countryCodes = [
+            'FR' => '+33',  // France
+            'BE' => '+32',  // Belgique
+            'CH' => '+41',  // Suisse
+            'CA' => '+1',   // Canada
+            'US' => '+1',   // États-Unis
+            'GB' => '+44',  // Royaume-Uni
+            'DE' => '+49',  // Allemagne
+            'ES' => '+34',  // Espagne
+            'IT' => '+39',  // Italie
+            'AU' => '+61',  // Australie
+            'BR' => '+55',  // Brésil
+            'MA' => '+212', // Maroc
+            'TN' => '+216', // Tunisie
+            'DZ' => '+213', // Algérie
+        ];
+
+        $phoneCode = $countryCodes[$countryCode] ?? '+33';
+
+        switch ($countryCode) {
+            case 'FR':
+                return $this->generateFrenchPhoneNumber($phoneCode);
+            case 'BE':
+                return $this->generateBelgianPhoneNumber($phoneCode);
+            case 'CH':
+                return $this->generateSwissPhoneNumber($phoneCode);
+            case 'CA':
+            case 'US':
+                return $this->generateNorthAmericanPhoneNumber($phoneCode);
+            case 'GB':
+                return $this->generateUKPhoneNumber($phoneCode);
+            case 'DE':
+                return $this->generateGermanPhoneNumber($phoneCode);
+            case 'ES':
+                return $this->generateSpanishPhoneNumber($phoneCode);
+            case 'IT':
+                return $this->generateItalianPhoneNumber($phoneCode);
+            case 'AU':
+                return $this->generateAustralianPhoneNumber($phoneCode);
+            case 'BR':
+                return $this->generateBrazilianPhoneNumber($phoneCode);
+            case 'MA':
+            case 'TN':
+            case 'DZ':
+                return $this->generateNorthAfricanPhoneNumber($phoneCode);
+            default:
+                return $this->generateFrenchPhoneNumber($phoneCode);
+        }
+    }
+
+    /**
+     * Generate French phone number
+     */
+    private function generateFrenchPhoneNumber(string $phoneCode): string
+    {
+        $prefixes = ['06', '07'];
+        $prefix = $prefixes[array_rand($prefixes)];
+        $number = str_pad(rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+
+        $internationalPrefix = substr($prefix, 1); // Enlever le 0
+        $formattedNumber = substr($number, 0, 2).' '.substr($number, 2, 2).' '.substr($number, 4, 2).' '.substr($number, 6, 2);
+
+        return $phoneCode.' '.$internationalPrefix.' '.$formattedNumber;
+    }
+
+    /**
+     * Generate Belgian phone number
+     */
+    private function generateBelgianPhoneNumber(string $phoneCode): string
+    {
+        $prefixes = ['04', '05', '06', '07', '08', '09'];
+        $prefix = $prefixes[array_rand($prefixes)];
+        $number = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $internationalPrefix = substr($prefix, 1); // Enlever le 0
+        $formattedNumber = substr($number, 0, 3).' '.substr($number, 3, 3);
+
+        return $phoneCode.' '.$internationalPrefix.' '.$formattedNumber;
+    }
+
+    /**
+     * Generate Swiss phone number
+     */
+    private function generateSwissPhoneNumber(string $phoneCode): string
+    {
+        $prefixes = ['07', '08', '09'];
+        $prefix = $prefixes[array_rand($prefixes)];
+        $number = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        $internationalPrefix = substr($prefix, 1); // Enlever le 0
+        $formattedNumber = substr($number, 0, 3).' '.substr($number, 3, 3);
+
+        return $phoneCode.' '.$internationalPrefix.' '.$formattedNumber;
+    }
+
+    /**
+     * Generate North American phone number
+     */
+    private function generateNorthAmericanPhoneNumber(string $phoneCode): string
+    {
+        $areaCode = str_pad(rand(200, 999), 3, '0', STR_PAD_LEFT);
+        $number = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
+
+        $formattedNumber = substr($number, 0, 3).'-'.substr($number, 3, 4);
+
+        return $phoneCode.' ('.$areaCode.') '.$formattedNumber;
+    }
+
+    /**
+     * Generate UK phone number
+     */
+    private function generateUKPhoneNumber(string $phoneCode): string
+    {
+        $prefixes = ['07', '01', '02'];
+        $prefix = $prefixes[array_rand($prefixes)];
+        $number = str_pad(rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+
+        $internationalPrefix = substr($prefix, 1); // Enlever le 0
+        $formattedNumber = substr($number, 0, 4).' '.substr($number, 4, 4);
+
+        return $phoneCode.' '.$internationalPrefix.' '.$formattedNumber;
+    }
+
+    /**
+     * Generate German phone number
+     */
+    private function generateGermanPhoneNumber(string $phoneCode): string
+    {
+        $prefixes = ['01', '02', '03', '04', '05', '06', '07', '08', '09'];
+        $prefix = $prefixes[array_rand($prefixes)];
+        $number = str_pad(rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+
+        $internationalPrefix = substr($prefix, 1); // Enlever le 0
+        $formattedNumber = substr($number, 0, 4).' '.substr($number, 4, 4);
+
+        return $phoneCode.' '.$internationalPrefix.' '.$formattedNumber;
+    }
+
+    /**
+     * Generate Spanish phone number
+     */
+    private function generateSpanishPhoneNumber(string $phoneCode): string
+    {
+        $prefixes = ['06', '07', '08', '09'];
+        $prefix = $prefixes[array_rand($prefixes)];
+        $number = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
+
+        $internationalPrefix = substr($prefix, 1); // Enlever le 0
+        $formattedNumber = substr($number, 0, 3).' '.substr($number, 3, 2).' '.substr($number, 5, 2);
+
+        return $phoneCode.' '.$internationalPrefix.' '.$formattedNumber;
+    }
+
+    /**
+     * Generate Italian phone number
+     */
+    private function generateItalianPhoneNumber(string $phoneCode): string
+    {
+        $prefixes = ['03', '06', '07', '08', '09'];
+        $prefix = $prefixes[array_rand($prefixes)];
+        $number = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
+
+        $internationalPrefix = substr($prefix, 1); // Enlever le 0
+        $formattedNumber = substr($number, 0, 3).' '.substr($number, 3, 2).' '.substr($number, 5, 2);
+
+        return $phoneCode.' '.$internationalPrefix.' '.$formattedNumber;
+    }
+
+    /**
+     * Generate Australian phone number
+     */
+    private function generateAustralianPhoneNumber(string $phoneCode): string
+    {
+        $prefixes = ['04', '05', '07', '08'];
+        $prefix = $prefixes[array_rand($prefixes)];
+        $number = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
+
+        $internationalPrefix = substr($prefix, 1); // Enlever le 0
+        $formattedNumber = substr($number, 0, 3).' '.substr($number, 3, 2).' '.substr($number, 5, 2);
+
+        return $phoneCode.' '.$internationalPrefix.' '.$formattedNumber;
+    }
+
+    /**
+     * Generate Brazilian phone number
+     */
+    private function generateBrazilianPhoneNumber(string $phoneCode): string
+    {
+        $areaCode = str_pad(rand(11, 99), 2, '0', STR_PAD_LEFT);
+        $number = str_pad(rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+
+        $formattedNumber = substr($number, 0, 4).'-'.substr($number, 4, 4);
+
+        return $phoneCode.' '.$areaCode.' '.$formattedNumber;
+    }
+
+    /**
+     * Generate North African phone number
+     */
+    private function generateNorthAfricanPhoneNumber(string $phoneCode): string
+    {
+        $prefixes = ['06', '07', '08', '09'];
+        $prefix = $prefixes[array_rand($prefixes)];
+        $number = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
+
+        $internationalPrefix = substr($prefix, 1); // Enlever le 0
+        $formattedNumber = substr($number, 0, 3).' '.substr($number, 3, 2).' '.substr($number, 5, 2);
+
+        return $phoneCode.' '.$internationalPrefix.' '.$formattedNumber;
     }
 
     private function createRegionalProfiles(): void
@@ -53,8 +269,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 26,
                     'height' => 168,
-                    'hobbies' => ['Mode', 'Art', 'Café', 'Musées', 'Shopping']
-                ]
+                    'hobbies' => ['Mode', 'Art', 'Café', 'Musées', 'Shopping'],
+                ],
             ],
             [
                 'name' => 'Lucas Bernard',
@@ -65,8 +281,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 29,
                     'height' => 182,
-                    'hobbies' => ['Technologie', 'Startup', 'Bars', 'Sport', 'Gaming']
-                ]
+                    'hobbies' => ['Technologie', 'Startup', 'Bars', 'Sport', 'Gaming'],
+                ],
             ],
 
             // Lyon et région
@@ -79,8 +295,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 31,
                     'height' => 165,
-                    'hobbies' => ['Cuisine', 'Gastronomie', 'Vins', 'Marchés', 'Restaurants']
-                ]
+                    'hobbies' => ['Cuisine', 'Gastronomie', 'Vins', 'Marchés', 'Restaurants'],
+                ],
             ],
             [
                 'name' => 'Thomas Roux',
@@ -91,8 +307,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 34,
                     'height' => 178,
-                    'hobbies' => ['Automobile', 'Montagne', 'Randonnée', 'Mécanique', 'Sport']
-                ]
+                    'hobbies' => ['Automobile', 'Montagne', 'Randonnée', 'Mécanique', 'Sport'],
+                ],
             ],
 
             // Marseille et région
@@ -105,8 +321,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 27,
                     'height' => 162,
-                    'hobbies' => ['Mer', 'Voile', 'Plage', 'Apéro', 'Sport nautique']
-                ]
+                    'hobbies' => ['Mer', 'Voile', 'Plage', 'Apéro', 'Sport nautique'],
+                ],
             ],
             [
                 'name' => 'Julien Petit',
@@ -117,8 +333,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 25,
                     'height' => 185,
-                    'hobbies' => ['Surf', 'Photographie', 'Mer', 'Sport', 'Nature']
-                ]
+                    'hobbies' => ['Surf', 'Photographie', 'Mer', 'Sport', 'Nature'],
+                ],
             ],
 
             // Toulouse
@@ -131,8 +347,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 28,
                     'height' => 170,
-                    'hobbies' => ['Aéronautique', 'Aviation', 'Science', 'Voyage', 'Lecture']
-                ]
+                    'hobbies' => ['Aéronautique', 'Aviation', 'Science', 'Voyage', 'Lecture'],
+                ],
             ],
             [
                 'name' => 'Nicolas Garcia',
@@ -143,8 +359,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 32,
                     'height' => 180,
-                    'hobbies' => ['Aérospatial', 'Montagne', 'Technologie', 'Sport', 'Musique']
-                ]
+                    'hobbies' => ['Aérospatial', 'Montagne', 'Technologie', 'Sport', 'Musique'],
+                ],
             ],
 
             // Nice et Côte d'Azur
@@ -157,8 +373,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 30,
                     'height' => 164,
-                    'hobbies' => ['Tourisme', 'Festivals', 'Mer', 'Culture', 'Art']
-                ]
+                    'hobbies' => ['Tourisme', 'Festivals', 'Mer', 'Culture', 'Art'],
+                ],
             ],
             [
                 'name' => 'Alexandre Moreau',
@@ -169,8 +385,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 33,
                     'height' => 176,
-                    'hobbies' => ['Entrepreneuriat', 'Digital', 'Innovation', 'Mer', 'Sport']
-                ]
+                    'hobbies' => ['Entrepreneuriat', 'Digital', 'Innovation', 'Mer', 'Sport'],
+                ],
             ],
 
             // Nantes
@@ -183,8 +399,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 29,
                     'height' => 167,
-                    'hobbies' => ['Design', 'Art contemporain', 'Créativité', 'Culture', 'Musées']
-                ]
+                    'hobbies' => ['Design', 'Art contemporain', 'Créativité', 'Culture', 'Musées'],
+                ],
             ],
             [
                 'name' => 'Maxime Durand',
@@ -195,8 +411,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 26,
                     'height' => 183,
-                    'hobbies' => ['Développement', 'Tech', 'Culture', 'Musique', 'Sport']
-                ]
+                    'hobbies' => ['Développement', 'Tech', 'Culture', 'Musique', 'Sport'],
+                ],
             ],
 
             // Strasbourg
@@ -209,8 +425,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 31,
                     'height' => 169,
-                    'hobbies' => ['Europe', 'Langues', 'Culture', 'Voyage', 'Politique']
-                ]
+                    'hobbies' => ['Europe', 'Langues', 'Culture', 'Voyage', 'Politique'],
+                ],
             ],
             [
                 'name' => 'Florian Weber',
@@ -221,8 +437,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 35,
                     'height' => 181,
-                    'hobbies' => ['Droit', 'Europe', 'Brasseries', 'Culture', 'Lecture']
-                ]
+                    'hobbies' => ['Droit', 'Europe', 'Brasseries', 'Culture', 'Lecture'],
+                ],
             ],
 
             // Bordeaux
@@ -235,8 +451,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 28,
                     'height' => 166,
-                    'hobbies' => ['Vin', 'Viticulture', 'Dégustation', 'Culture', 'Gastronomie']
-                ]
+                    'hobbies' => ['Vin', 'Viticulture', 'Dégustation', 'Culture', 'Gastronomie'],
+                ],
             ],
             [
                 'name' => 'Baptiste Simon',
@@ -247,8 +463,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 30,
                     'height' => 179,
-                    'hobbies' => ['Vin', 'Sommelier', 'Dégustation', 'Gastronomie', 'Culture']
-                ]
+                    'hobbies' => ['Vin', 'Sommelier', 'Dégustation', 'Gastronomie', 'Culture'],
+                ],
             ],
 
             // Lille
@@ -261,8 +477,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 27,
                     'height' => 163,
-                    'hobbies' => ['Commerce', 'Braderies', 'Culture', 'Amis', 'Shopping']
-                ]
+                    'hobbies' => ['Commerce', 'Braderies', 'Culture', 'Amis', 'Shopping'],
+                ],
             ],
             [
                 'name' => 'Quentin Martin',
@@ -273,9 +489,9 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 24,
                     'height' => 184,
-                    'hobbies' => ['Football', 'Sport', 'Amis', 'Estaminets', 'Culture']
-                ]
-            ]
+                    'hobbies' => ['Football', 'Sport', 'Amis', 'Estaminets', 'Culture'],
+                ],
+            ],
         ];
 
         foreach ($regionalProfiles as $userData) {
@@ -284,15 +500,15 @@ class MassiveUserSeeder extends Seeder
             unset($userData['city'], $userData['profile']);
 
             // Ajouter le mot de passe si pas déjà présent
-            if (!isset($userData['password'])) {
+            if (! isset($userData['password'])) {
                 $userData['password'] = \Illuminate\Support\Facades\Hash::make('password');
             }
 
-            // Générer un téléphone unique
-            $userData['phone'] = '06 ' . rand(10, 99) . ' ' . rand(10, 99) . ' ' . rand(10, 99) . ' ' . rand(10, 99);
+            // Générer un téléphone unique avec indicatif pays
+            $userData['phone'] = $this->generatePhoneNumberWithCountryCode('FR');
 
             // Générer un email unique
-            $userData['email'] = 'regional_' . uniqid() . '@example.com';
+            $userData['email'] = 'regional_'.uniqid().'@example.com';
 
             $user = User::create($userData);
 
@@ -300,7 +516,7 @@ class MassiveUserSeeder extends Seeder
                 'user_id' => $user->id,
                 'country_id' => $france->id,
                 'city_id' => $city->id,
-                ...$profileData
+                ...$profileData,
             ]);
         }
     }
@@ -323,8 +539,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 29,
                     'height' => 168,
-                    'hobbies' => ['Langues', 'Europe', 'Musées', 'Culture', 'Voyage']
-                ]
+                    'hobbies' => ['Langues', 'Europe', 'Musées', 'Culture', 'Voyage'],
+                ],
             ],
             [
                 'name' => 'Thomas De Vries',
@@ -336,8 +552,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 32,
                     'height' => 182,
-                    'hobbies' => ['Diamant', 'Art', 'Culture', 'Vélo', 'Sport']
-                ]
+                    'hobbies' => ['Diamant', 'Art', 'Culture', 'Vélo', 'Sport'],
+                ],
             ],
 
             // Suisse
@@ -351,8 +567,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 30,
                     'height' => 165,
-                    'hobbies' => ['Finance', 'Montagne', 'Ski', 'Sport', 'Nature']
-                ]
+                    'hobbies' => ['Finance', 'Montagne', 'Ski', 'Sport', 'Nature'],
+                ],
             ],
             [
                 'name' => 'Marc Dubois',
@@ -364,8 +580,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 33,
                     'height' => 180,
-                    'hobbies' => ['Horlogerie', 'Précision', 'Lac', 'Voile', 'Sport']
-                ]
+                    'hobbies' => ['Horlogerie', 'Précision', 'Lac', 'Voile', 'Sport'],
+                ],
             ],
 
             // Canada
@@ -379,8 +595,8 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'female',
                     'age' => 28,
                     'height' => 167,
-                    'hobbies' => ['Cinéma', 'Festivals', 'Hiver', 'Culture', 'Art']
-                ]
+                    'hobbies' => ['Cinéma', 'Festivals', 'Hiver', 'Culture', 'Art'],
+                ],
             ],
             [
                 'name' => 'Jean-Pierre Gagnon',
@@ -392,9 +608,9 @@ class MassiveUserSeeder extends Seeder
                     'gender' => 'male',
                     'age' => 31,
                     'height' => 185,
-                    'hobbies' => ['Histoire', 'Tourisme', 'Hiver', 'Hockey', 'Sport']
-                ]
-            ]
+                    'hobbies' => ['Histoire', 'Tourisme', 'Hiver', 'Hockey', 'Sport'],
+                ],
+            ],
         ];
 
         foreach ($internationalProfiles as $userData) {
@@ -404,15 +620,16 @@ class MassiveUserSeeder extends Seeder
             unset($userData['country'], $userData['city'], $userData['profile']);
 
             // Ajouter le mot de passe si pas déjà présent
-            if (!isset($userData['password'])) {
+            if (! isset($userData['password'])) {
                 $userData['password'] = \Illuminate\Support\Facades\Hash::make('password');
             }
 
-            // Générer un téléphone unique
-            $userData['phone'] = '+33 6 ' . rand(10, 99) . ' ' . rand(10, 99) . ' ' . rand(10, 99) . ' ' . rand(10, 99);
+            // Générer un téléphone unique avec indicatif pays selon le pays
+            $countryCode = $country->code ?? 'FR';
+            $userData['phone'] = $this->generatePhoneNumberWithCountryCode($countryCode);
 
             // Générer un email unique
-            $userData['email'] = 'international_' . uniqid() . '@example.com';
+            $userData['email'] = 'international_'.uniqid().'@example.com';
 
             $user = User::create($userData);
 
@@ -420,7 +637,7 @@ class MassiveUserSeeder extends Seeder
                 'user_id' => $user->id,
                 'country_id' => $country->id,
                 'city_id' => $city->id,
-                ...$profileData
+                ...$profileData,
             ]);
         }
     }

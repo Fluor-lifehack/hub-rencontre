@@ -184,16 +184,16 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID du profil.'
+        description: 'UUID du profil.'
         required: true
-        example: 1
-        type: integer
+        example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: 3fe609a4-a037-4dab-adca-6c8e94a242c4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -257,16 +257,16 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/profiles/{id}'
+    uri: api/v1/profiles/me
     metadata:
       groupName: Profiles
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Supprimer un profil
+        Supprimer son propre profil
 
-        Supprime un profil.
+        Supprime le profil de l'utilisateur authentifié.
       description: ''
       authenticated: false
       deprecated: false
@@ -274,19 +274,8 @@ endpoints:
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID du profil.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -298,10 +287,20 @@ endpoints:
         content: |-
           {
             "success": true,
-            "message": "Profil supprimé avec succès"
+            "message": "Votre profil a été supprimé avec succès"
           }
         headers: []
         description: 'Profil supprimé'
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+            "success": false,
+            "message": "Vous ne pouvez supprimer que votre propre profil"
+          }
+        headers: []
+        description: 'Accès refusé'
         custom: []
       -
         status: 404

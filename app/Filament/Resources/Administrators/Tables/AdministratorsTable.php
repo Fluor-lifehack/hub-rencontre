@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Administrators\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class AdministratorsTable
@@ -13,7 +15,20 @@ class AdministratorsTable
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')
+                    ->searchable(),
+                TextColumn::make('email')
+                    ->searchable(),
+                TextColumn::make('role')
+                    ->searchable(),
+                ToggleColumn::make('is_active'),
+                TextColumn::make('last_login_at')
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

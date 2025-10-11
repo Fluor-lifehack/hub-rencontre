@@ -1,187 +1,201 @@
-# 📋 Collection Postman - Rencontre Hub API
+# 🚀 Guide Postman - Rencontre Hub API
 
-## 🚀 Installation
+## 📋 Vue d'ensemble
 
-### 1. Importer la collection
-1. Ouvrir Postman
-2. Cliquer sur "Import"
-3. Sélectionner le fichier `Rencontre-Hub-API.postman_collection.json`
-4. Cliquer sur "Import"
+Cette collection Postman contient toutes les routes de l'API Rencontre Hub, optimisée pour les tests et le développement.
 
-### 2. Importer l'environnement
-1. Dans Postman, aller dans "Environments"
-2. Cliquer sur "Import"
-3. Sélectionner le fichier `Rencontre-Hub-Environment.postman_environment.json`
-4. Cliquer sur "Import"
-5. Sélectionner l'environnement "Rencontre Hub - Développement"
+## 🔧 Configuration
 
-## 🔐 Authentification automatique
+### 1. Importer la collection et l'environnement
 
-### Configuration
-- L'authentification Bearer Token est configurée automatiquement
-- Le token est sauvegardé automatiquement après la connexion
-- Utilisez la variable `{{token}}` dans vos requêtes
+1. **Collection** : `Rencontre-Hub-API.postman_collection.json`
+2. **Environnement** : `Rencontre-Hub-Environment.postman_environment.json`
 
-### Première connexion
-1. Exécuter la requête "🔐 Authentification > Connexion"
-2. Le token sera automatiquement sauvegardé
-3. Toutes les autres requêtes utiliseront ce token
+### 2. Variables d'environnement
 
-## 📚 Structure de la collection
+| Variable | Description | Valeur par défaut |
+|----------|-------------|-------------------|
+| `baseUrl` | URL de base de l'API | `http://localhost:8000` |
+| `token` | Token d'authentification | (vide) |
+| `userId` | ID d'un utilisateur | (vide) |
+| `profileId` | ID d'un profil | (vide) |
+| `matchId` | ID d'une correspondance | (vide) |
+| `photoId` | ID d'une photo | (vide) |
+| `countryId` | ID d'un pays | `dc23c65b-43c7-43e6-be6f-e5aaa6c64421` |
+| `planId` | ID d'un plan | (vide) |
+
+## 🔐 Authentification
+
+### Connexion automatique
+1. Exécutez la requête **"Connexion"** dans le dossier **"🔐 Authentification"**
+2. Le token sera automatiquement extrait et défini dans la variable `token`
+3. Toutes les requêtes suivantes utiliseront automatiquement ce token
+
+### Connexion manuelle
+```json
+{
+    "email": "user@example.com",
+    "password": "password"
+}
+```
+
+## 🎯 Utilisation des routes
 
 ### 🔐 Authentification
-- **Connexion** - POST `/auth/login`
-- **Inscription** - POST `/auth/register`
-- **Déconnexion** - POST `/auth/logout`
-- **Profil utilisateur actuel** - GET `/auth/me`
+- **POST** `/api/v1/auth/login` - Connexion
+- **POST** `/api/v1/auth/register` - Inscription
+- **POST** `/api/v1/auth/logout` - Déconnexion
+- **GET** `/api/v1/auth/me` - Profil utilisateur
+
+### 👤 Utilisateurs
+- **GET** `/api/v1/users` - Liste des utilisateurs
+- **POST** `/api/v1/users` - Créer un utilisateur
+- **GET** `/api/v1/users/{id}` - Détails d'un utilisateur
+- **PUT** `/api/v1/users/{id}` - Modifier un utilisateur
+- **🗑️ DELETE** `/api/v1/users/me` - **Supprimer son propre compte**
 
 ### 👤 Profils
-- **Liste des profils** - GET `/profiles`
-- **Profils féminins** - GET `/profiles?gender=female`
-- **Profils masculins** - GET `/profiles?gender=male`
-- **Filtre par âge** - GET `/profiles?age_min=25&age_max=35`
-- **Recherche textuelle** - GET `/profiles?search=voyage`
-- **Détails d'un profil** - GET `/profiles/{id}`
-- **Créer un profil** - POST `/profiles`
-- **Modifier un profil** - PUT `/profiles/{id}`
-- **Supprimer un profil** - DELETE `/profiles/{id}`
+- **GET** `/api/v1/profiles` - Liste des profils
+- **POST** `/api/v1/profiles` - Créer un profil
+- **GET** `/api/v1/profiles/{id}` - Détails d'un profil
+- **PUT** `/api/v1/profiles/{id}` - Modifier un profil
+- **🗑️ DELETE** `/api/v1/profiles/me` - **Supprimer son propre profil**
 
-### 💕 Matches
-- **Liste des matches** - GET `/matches`
-- **Matches mutuels** - GET `/matches?is_mutual=true`
-- **Créer un match** - POST `/matches`
-- **Détails d'un match** - GET `/matches/{id}`
-- **Mettre à jour un match** - PUT `/matches/{id}`
-- **Supprimer un match** - DELETE `/matches/{id}`
+### 💕 Correspondances
+- **GET** `/api/v1/matches` - Liste des correspondances
+- **POST** `/api/v1/matches` - Créer une correspondance
+- **GET** `/api/v1/matches/{id}` - Détails d'une correspondance
+- **PUT** `/api/v1/matches/{id}` - Modifier une correspondance
+- **DELETE** `/api/v1/matches/{id}` - Supprimer une correspondance
 
 ### 📸 Photos
-- **Liste des photos** - GET `/photos`
-- **Photos d'un utilisateur** - GET `/photos?user_id=1`
-- **Photo de profil** - GET `/photos?is_profile=true`
-- **Détails d'une photo** - GET `/photos/{id}`
-- **Supprimer une photo** - DELETE `/photos/{id}`
+- **GET** `/api/v1/photos` - Liste des photos
+- **POST** `/api/v1/photos` - Uploader une photo
+- **GET** `/api/v1/photos/{id}` - Détails d'une photo
+- **PUT** `/api/v1/photos/{id}` - Modifier une photo
+- **DELETE** `/api/v1/photos/{id}` - Supprimer une photo
 
-### 🌍 Pays et Villes
-- **Liste des pays** - GET `/countries`
-- **Détails d'un pays** - GET `/countries/{id}`
+### 🌍 Pays (Lecture seule)
+- **GET** `/api/v1/countries` - Liste des pays
+- **GET** `/api/v1/countries/{id}` - Détails d'un pays
 
-### 💎 Plans
-- **Liste des plans** - GET `/plans`
-- **Détails d'un plan** - GET `/plans/{id}`
+### 💎 Plans (Lecture seule)
+- **GET** `/api/v1/plans` - Liste des plans
+- **GET** `/api/v1/plans/{id}` - Détails d'un plan
 
-### 👥 Utilisateurs
-- **Liste des utilisateurs** - GET `/users`
-- **Détails d'un utilisateur** - GET `/users/{id}`
-- **Créer un utilisateur** - POST `/users`
-- **Modifier un utilisateur** - PUT `/users/{id}`
-- **Supprimer un utilisateur** - DELETE `/users/{id}`
+## 🔒 Sécurité - Nouvelles fonctionnalités
 
-### 🧪 Tests
-- **Test de connexion automatique** - Teste l'authentification
-- **Test des profils avec token** - Teste l'accès aux profils
+### ⚠️ Suppression sécurisée
 
-## 🎯 Comptes de test disponibles
+**IMPORTANT** : Les routes de suppression ont été modifiées pour garantir la sécurité :
 
-| Email | Mot de passe | Profil |
-|-------|-------------|--------|
-| `marie.dubois@example.com` | `password` | Femme, 28 ans, Architecte |
-| `pierre.martin@example.com` | `password` | Homme, 32 ans, Ingénieur |
-| `sophie.laurent@example.com` | `password` | Femme, 25 ans, Artiste |
-| `antoine.rousseau@example.com` | `password` | Homme, 29 ans, Chef |
-| `camille.petit@example.com` | `password` | Femme, 30 ans, Professeur |
+#### ✅ **Nouvelles routes sécurisées :**
+- `DELETE /api/v1/users/me` - Supprimer **son propre** compte
+- `DELETE /api/v1/profiles/me` - Supprimer **son propre** profil
 
-## 🔧 Variables d'environnement
+#### ❌ **Anciennes routes supprimées :**
+- ~~`DELETE /api/v1/users/{id}`~~ - **Plus accessible**
+- ~~`DELETE /api/v1/profiles/{id}`~~ - **Plus accessible**
 
-| Variable | Valeur par défaut | Description |
-|----------|------------------|-------------|
-| `baseUrl` | `http://localhost:8000/api/v1` | URL de base de l'API |
-| `token` | (vide) | Token d'authentification |
-| `userId` | `1` | ID d'utilisateur pour les tests |
-| `profileId` | `1` | ID de profil pour les tests |
-| `matchId` | `1` | ID de match pour les tests |
-| `photoId` | `1` | ID de photo pour les tests |
-| `countryId` | `1` | ID de pays pour les tests |
-| `planId` | `1` | ID de plan pour les tests |
+### 🛡️ Avantages de la sécurité
 
-## 📊 Filtres disponibles pour les profils
+1. **Impossible de supprimer le compte d'autrui**
+2. **Authentification obligatoire**
+3. **Vérification automatique de la propriété**
+4. **Routes intuitives avec `/me`**
 
-### Paramètres de requête
-- `page` - Numéro de page (défaut: 1)
-- `per_page` - Nombre d'éléments par page (max: 50, défaut: 15)
-- `search` - Recherche par bio ou nom d'utilisateur
-- `gender` - Filtrer par genre (`male`, `female`, `other`)
-- `age_min` - Âge minimum
-- `age_max` - Âge maximum
-- `country_id` - ID du pays
-- `city_id` - ID de la ville
-
-### Exemples d'URLs
-```
-GET /profiles?gender=female&age_min=25&age_max=35&per_page=20
-GET /profiles?search=voyage&city_id=1
-GET /profiles?country_id=1&gender=male
-```
-
-## 🧪 Tests automatisés
-
-### Tests de connexion
-- Vérifie que la connexion retourne un statut 200
-- Vérifie que le token est présent dans la réponse
-- Sauvegarde automatiquement le token
-
-### Tests d'accès
-- Vérifie que l'accès aux profils est autorisé
-- Vérifie que les données sont bien formatées
-- Vérifie la structure de la réponse
-
-## 🚨 Codes d'erreur
+## 📊 Codes de réponse
 
 | Code | Description |
 |------|-------------|
 | `200` | Succès |
 | `201` | Créé avec succès |
-| `400` | Requête invalide |
+| `400` | Erreur de validation |
 | `401` | Non authentifié |
-| `403` | Non autorisé |
+| `403` | Accès refusé |
 | `404` | Ressource non trouvée |
 | `422` | Erreur de validation |
 | `500` | Erreur serveur |
 
-## 💡 Conseils d'utilisation
+## 🧪 Tests recommandés
 
-### 1. Ordre d'exécution recommandé
-1. **Connexion** - Pour obtenir le token
-2. **Profil utilisateur actuel** - Vérifier l'authentification
-3. **Liste des profils** - Explorer les données disponibles
-4. **Tests spécifiques** - Selon vos besoins
+### 1. Test de connexion
+```bash
+# 1. Connexion
+POST /api/v1/auth/login
+# 2. Vérifier le profil
+GET /api/v1/auth/me
+```
 
-### 2. Gestion des tokens
-- Le token expire après un certain temps
-- Réexécutez la connexion si vous obtenez une erreur 401
-- Le token est automatiquement mis à jour
+### 2. Test de suppression sécurisée
+```bash
+# 1. Se connecter avec un utilisateur
+POST /api/v1/auth/login
+# 2. Supprimer son propre compte
+DELETE /api/v1/users/me
+# 3. Vérifier que l'utilisateur est supprimé
+GET /api/v1/auth/me # → 401 Unauthorized
+```
 
-### 3. Tests de performance
-- Utilisez `per_page` pour limiter les résultats
-- Testez avec différents filtres
-- Vérifiez les temps de réponse
+### 3. Test de sécurité
+```bash
+# 1. Essayer d'accéder à l'ancienne route
+DELETE /api/v1/users/some-uuid # → 404 Not Found
+# 2. Essayer sans authentification
+DELETE /api/v1/users/me # → 401 Unauthorized
+```
 
-## 🔄 Mise à jour
+## 🔧 Scripts automatiques
 
-Pour mettre à jour la collection :
-1. Régénérez la documentation avec `php artisan scribe:generate`
-2. Importez la nouvelle collection générée
-3. Ou modifiez manuellement les requêtes selon vos besoins
+### Extraction automatique du token
+La collection contient un script qui extrait automatiquement le token de la réponse de connexion :
+
+```javascript
+// Auto-extract token from login response
+if (pm.response && pm.response.json && pm.response.json.data && pm.response.json.data.token) {
+    pm.collectionVariables.set('token', pm.response.json.data.token);
+    console.log('Token automatiquement extrait et défini');
+}
+```
+
+## 📝 Exemples de requêtes
+
+### Créer un profil
+```json
+{
+    "bio": "Passionné de voyage et de cuisine",
+    "gender": "male",
+    "age": 28,
+    "country_id": "dc23c65b-43c7-43e6-be6f-e5aaa6c64421",
+    "city_id": "50",
+    "height": 175,
+    "hobbies": ["Voyage", "Cuisine", "Sport"]
+}
+```
+
+### Créer une correspondance
+```json
+{
+    "matched_user_id": "46b67f53-eeaf-406e-bc87-af4f4e4bea0f",
+    "compatibility_score": 85
+}
+```
+
+## 🚨 Points d'attention
+
+1. **UUIDs** : Tous les IDs utilisent des UUIDs (format : `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`)
+2. **Authentification** : La plupart des routes nécessitent un token Bearer
+3. **Suppression** : Seule la suppression de son propre compte/profil est autorisée
+4. **Pagination** : Utilisez `per_page` pour limiter les résultats
+5. **Filtres** : Les profils supportent des filtres (`gender`, `age`, etc.)
 
 ## 📞 Support
 
-En cas de problème :
-1. Vérifiez que le serveur Laravel est démarré (`php artisan serve`)
-2. Vérifiez l'authentification (token valide)
-3. Consultez les logs Laravel (`storage/logs/laravel.log`)
-4. Vérifiez la documentation API (`http://localhost:8000/docs`)
+Pour toute question ou problème :
+- Vérifiez que le serveur Laravel est démarré : `php artisan serve`
+- Consultez les logs : `tail -f storage/logs/laravel.log`
+- Testez l'API directement : `http://localhost:8000/docs`
 
 ---
 
-**Collection créée le :** 11 octobre 2025  
-**Version API :** 1.0.0  
-**Environnement :** Développement local
+**🎉 Bonne utilisation de l'API Rencontre Hub !**

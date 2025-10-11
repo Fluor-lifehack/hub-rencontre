@@ -1,0 +1,779 @@
+{
+    "info": {
+        "name": "Rencontre Hub API",
+        "description": "API pour l'application de rencontre Rencontre Hub",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_postman_id": "rencontre-hub-api-v2"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://rencontre-hub.ddev.site",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "🔐 Authentification",
+            "item": [
+                {
+                    "name": "Connexion",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/login",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "auth", "login"]
+                        },
+                        "description": "Connexion d'un utilisateur"
+                    }
+                },
+                {
+                    "name": "Inscription",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\",\n    \"phone\": \"06 12 34 56 78\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/register",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "auth", "register"]
+                        },
+                        "description": "Inscription d'un nouvel utilisateur"
+                    }
+                },
+                {
+                    "name": "Déconnexion",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/logout",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "auth", "logout"]
+                        },
+                        "description": "Déconnexion de l'utilisateur"
+                    }
+                },
+                {
+                    "name": "Profil utilisateur",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/me",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "auth", "me"]
+                        },
+                        "description": "Récupérer les informations de l'utilisateur connecté"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "👤 Utilisateurs",
+            "item": [
+                {
+                    "name": "Liste des utilisateurs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/users?per_page=20",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "users"],
+                            "query": [
+                                {
+                                    "key": "per_page",
+                                    "value": "20"
+                                }
+                            ]
+                        },
+                        "description": "Récupérer la liste des utilisateurs"
+                    }
+                },
+                {
+                    "name": "Créer un utilisateur",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Jane Doe\",\n    \"email\": \"jane@example.com\",\n    \"password\": \"password\",\n    \"phone\": \"06 98 76 54 32\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/users",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "users"]
+                        },
+                        "description": "Créer un nouvel utilisateur"
+                    }
+                },
+                {
+                    "name": "Détails d'un utilisateur",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/users/{{userId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "users", "{{userId}}"]
+                        },
+                        "description": "Récupérer les détails d'un utilisateur spécifique"
+                    }
+                },
+                {
+                    "name": "Modifier un utilisateur",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Jane Smith\",\n    \"phone\": \"06 11 22 33 44\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/users/{{userId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "users", "{{userId}}"]
+                        },
+                        "description": "Modifier les informations d'un utilisateur"
+                    }
+                },
+                {
+                    "name": "🗑️ Supprimer mon compte",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/users/me",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "users", "me"]
+                        },
+                        "description": "Supprimer son propre compte (soft delete)"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "👤 Profils",
+            "item": [
+                {
+                    "name": "Liste des profils",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profiles?gender=male&per_page=20",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profiles"],
+                            "query": [
+                                {
+                                    "key": "gender",
+                                    "value": "male"
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "20"
+                                }
+                            ]
+                        },
+                        "description": "Récupérer la liste des profils avec filtres"
+                    }
+                },
+                {
+                    "name": "Créer un profil",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"bio\": \"Passionné de voyage et de cuisine\",\n    \"gender\": \"male\",\n    \"age\": 28,\n    \"country_id\": \"dc23c65b-43c7-43e6-be6f-e5aaa6c64421\",\n    \"city_id\": \"50\",\n    \"height\": 175,\n    \"hobbies\": [\"Voyage\", \"Cuisine\", \"Sport\"]\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profiles",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profiles"]
+                        },
+                        "description": "Créer un nouveau profil"
+                    }
+                },
+                {
+                    "name": "Détails d'un profil",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profiles/{{profileId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profiles", "{{profileId}}"]
+                        },
+                        "description": "Récupérer les détails d'un profil spécifique"
+                    }
+                },
+                {
+                    "name": "Modifier un profil",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"bio\": \"Nouvelle bio mise à jour\",\n    \"age\": 29,\n    \"hobbies\": [\"Voyage\", \"Cuisine\", \"Sport\", \"Musique\"]\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profiles/{{profileId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profiles", "{{profileId}}"]
+                        },
+                        "description": "Modifier les informations d'un profil"
+                    }
+                },
+                {
+                    "name": "🗑️ Supprimer mon profil",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profiles/me",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profiles", "me"]
+                        },
+                        "description": "Supprimer son propre profil"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "💕 Correspondances",
+            "item": [
+                {
+                    "name": "Liste des correspondances",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/matches?per_page=10",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "matches"],
+                            "query": [
+                                {
+                                    "key": "per_page",
+                                    "value": "10"
+                                }
+                            ]
+                        },
+                        "description": "Récupérer la liste des correspondances"
+                    }
+                },
+                {
+                    "name": "Créer une correspondance",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"matched_user_id\": \"46b67f53-eeaf-406e-bc87-af4f4e4bea0f\",\n    \"compatibility_score\": 85\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/matches",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "matches"]
+                        },
+                        "description": "Créer une nouvelle correspondance"
+                    }
+                },
+                {
+                    "name": "Détails d'une correspondance",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/matches/{{matchId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "matches", "{{matchId}}"]
+                        },
+                        "description": "Récupérer les détails d'une correspondance"
+                    }
+                },
+                {
+                    "name": "Modifier une correspondance",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"compatibility_score\": 90,\n    \"is_mutual\": true\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/matches/{{matchId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "matches", "{{matchId}}"]
+                        },
+                        "description": "Modifier une correspondance"
+                    }
+                },
+                {
+                    "name": "Supprimer une correspondance",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/matches/{{matchId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "matches", "{{matchId}}"]
+                        },
+                        "description": "Supprimer une correspondance"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📸 Photos",
+            "item": [
+                {
+                    "name": "Liste des photos",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/photos?per_page=10",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "photos"],
+                            "query": [
+                                {
+                                    "key": "per_page",
+                                    "value": "10"
+                                }
+                            ]
+                        },
+                        "description": "Récupérer la liste des photos"
+                    }
+                },
+                {
+                    "name": "Créer une photo",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "photo",
+                                    "type": "file",
+                                    "src": []
+                                },
+                                {
+                                    "key": "is_profile",
+                                    "value": "true",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/photos",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "photos"]
+                        },
+                        "description": "Uploader une nouvelle photo"
+                    }
+                },
+                {
+                    "name": "Détails d'une photo",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/photos/{{photoId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "photos", "{{photoId}}"]
+                        },
+                        "description": "Récupérer les détails d'une photo"
+                    }
+                },
+                {
+                    "name": "Modifier une photo",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"is_profile\": false\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/photos/{{photoId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "photos", "{{photoId}}"]
+                        },
+                        "description": "Modifier les informations d'une photo"
+                    }
+                },
+                {
+                    "name": "Supprimer une photo",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/photos/{{photoId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "photos", "{{photoId}}"]
+                        },
+                        "description": "Supprimer une photo"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🌍 Pays",
+            "item": [
+                {
+                    "name": "Liste des pays",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/countries",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "countries"]
+                        },
+                        "description": "Récupérer la liste des pays"
+                    }
+                },
+                {
+                    "name": "Détails d'un pays",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/countries/{{countryId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "countries", "{{countryId}}"]
+                        },
+                        "description": "Récupérer les détails d'un pays"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "💎 Plans",
+            "item": [
+                {
+                    "name": "Liste des plans",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/plans",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "plans"]
+                        },
+                        "description": "Récupérer la liste des plans d'abonnement"
+                    }
+                },
+                {
+                    "name": "Détails d'un plan",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/plans/{{planId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "plans", "{{planId}}"]
+                        },
+                        "description": "Récupérer les détails d'un plan"
+                    }
+                }
+            ]
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "// Auto-extract token from login response",
+                    "if (pm.response && pm.response.json && pm.response.json.data && pm.response.json.data.token) {",
+                    "    pm.collectionVariables.set('token', pm.response.json.data.token);",
+                    "    console.log('Token automatiquement extrait et défini');",
+                    "}"
+                ]
+            }
+        }
+    ]
+}
