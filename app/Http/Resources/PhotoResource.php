@@ -16,7 +16,9 @@ class PhotoResource extends JsonResource
     {
         return [
             'id' => $this->uuid,
-            'user_id' => $this->when($this->user, $this->user->uuid),
+            'user_id' => $this->whenLoaded('user', function () {
+                return $this->user->uuid;
+            }),
             'path' => $this->path,
             'is_profile' => $this->is_profile,
             'created_at' => $this->created_at,

@@ -144,7 +144,7 @@ class MatchController extends Controller
      *
      * Récupère les détails d'une correspondance.
      *
-     * @urlParam id integer required ID de la correspondance. Example: 1
+     * @urlParam id string required UUID de la correspondance. Example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
      *
      * @response 200 scenario="Correspondance trouvée" {
      *   "success": true,
@@ -177,7 +177,7 @@ class MatchController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $match = UserMatch::with(['user', 'matchedUser'])->find($id);
+        $match = UserMatch::where('uuid', $id)->with(['user', 'matchedUser'])->first();
 
         if (!$match) {
             return response()->json([
@@ -199,7 +199,7 @@ class MatchController extends Controller
      *
      * Met à jour les informations d'une correspondance.
      *
-     * @urlParam id integer required ID de la correspondance. Example: 1
+     * @urlParam id string required UUID de la correspondance. Example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
      * @bodyParam compatibility_score decimal Score de compatibilité (0-100). Example: 85.50
      * @bodyParam is_mutual boolean Correspondance mutuelle. Example: true
      *
@@ -255,7 +255,7 @@ class MatchController extends Controller
      *
      * Supprime une correspondance.
      *
-     * @urlParam id integer required ID de la correspondance. Example: 1
+     * @urlParam id string required UUID de la correspondance. Example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
      *
      * @response 200 scenario="Correspondance supprimée" {
      *   "success": true,

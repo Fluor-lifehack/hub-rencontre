@@ -16,8 +16,12 @@ class ConversationResource extends JsonResource
     {
         return [
             'id' => $this->uuid,
-            'user_one' => $this->when($this->userOne, $this->userOne->uuid),
-            'user_two' => $this->when($this->userTwo, $this->userTwo->uuid),
+            'user_one' => $this->whenLoaded('userOne', function () {
+                return $this->userOne->uuid;
+            }),
+            'user_two' => $this->whenLoaded('userTwo', function () {
+                return $this->userTwo->uuid;
+            }),
             'last_message_at' => $this->last_message_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

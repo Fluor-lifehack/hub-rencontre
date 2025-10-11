@@ -16,8 +16,12 @@ class MatchResource extends JsonResource
     {
         return [
             'id' => $this->uuid,
-            'user_id' => $this->when($this->user, $this->user->uuid),
-            'matched_user_id' => $this->when($this->matchedUser, $this->matchedUser->uuid),
+            'user_id' => $this->whenLoaded('user', function () {
+                return $this->user->uuid;
+            }),
+            'matched_user_id' => $this->whenLoaded('matchedUser', function () {
+                return $this->matchedUser->uuid;
+            }),
             'compatibility_score' => $this->compatibility_score,
             'is_mutual' => $this->is_mutual,
             'created_at' => $this->created_at,

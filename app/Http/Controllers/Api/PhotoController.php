@@ -125,7 +125,7 @@ class PhotoController extends Controller
      *
      * Récupère les détails d'une photo.
      *
-     * @urlParam id integer required ID de la photo. Example: 1
+     * @urlParam id string required UUID de la photo. Example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
      *
      * @response 200 scenario="Photo trouvée" {
      *   "success": true,
@@ -151,7 +151,7 @@ class PhotoController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $photo = Photo::with('user')->find($id);
+        $photo = Photo::where('uuid', $id)->with('user')->first();
 
         if (! $photo) {
             return response()->json([
@@ -173,7 +173,7 @@ class PhotoController extends Controller
      *
      * Met à jour les informations d'une photo.
      *
-     * @urlParam id integer required ID de la photo. Example: 1
+     * @urlParam id string required UUID de la photo. Example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
      *
      * @bodyParam is_profile boolean Photo de profil. Example: true
      *
@@ -226,7 +226,7 @@ class PhotoController extends Controller
      *
      * Supprime une photo et le fichier associé.
      *
-     * @urlParam id integer required ID de la photo. Example: 1
+     * @urlParam id string required UUID de la photo. Example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
      *
      * @response 200 scenario="Photo supprimée" {
      *   "success": true,

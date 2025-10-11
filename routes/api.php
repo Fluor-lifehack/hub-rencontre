@@ -37,10 +37,18 @@ Route::prefix('v1')->group(function () {
         Route::get('/auth/me', [AuthController::class, 'me']);
 
         // Utilisateurs
-        Route::apiResource('users', UserController::class);
+        Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users', [UserController::class, 'store']);
+        Route::get('/users/{id}', [UserController::class, 'show']);
+        Route::put('/users/{id}', [UserController::class, 'update']);
+        Route::delete('/users/me', [UserController::class, 'destroy']); // Suppression de son propre compte
 
         // Profils
-        Route::apiResource('profiles', ProfileController::class);
+        Route::get('/profiles', [ProfileController::class, 'index']);
+        Route::post('/profiles', [ProfileController::class, 'store']);
+        Route::get('/profiles/{id}', [ProfileController::class, 'show']);
+        Route::put('/profiles/{id}', [ProfileController::class, 'update']);
+        Route::delete('/profiles/me', [ProfileController::class, 'destroy']); // Suppression de son propre profil
 
         // Correspondances
         Route::apiResource('matches', MatchController::class);

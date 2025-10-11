@@ -176,7 +176,7 @@ class ProfileController extends Controller
      *
      * Récupère les détails d'un profil avec ses relations.
      *
-     * @urlParam id integer required ID du profil. Example: 1
+     * @urlParam id string required UUID du profil. Example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
      *
      * @response 200 scenario="Profil trouvé" {
      *   "success": true,
@@ -217,7 +217,7 @@ class ProfileController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $profile = Profile::with(['user', 'country', 'city'])->find($id);
+        $profile = Profile::where('uuid', $id)->with(['user', 'country', 'city'])->first();
 
         if (! $profile) {
             return response()->json([
@@ -239,7 +239,7 @@ class ProfileController extends Controller
      *
      * Met à jour les informations d'un profil.
      *
-     * @urlParam id integer required ID du profil. Example: 1
+     * @urlParam id string required UUID du profil. Example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
      *
      * @bodyParam bio string Bio de l'utilisateur. Example: Passionné de voyages
      * @bodyParam gender string Genre (male, female, other). Example: male
@@ -276,7 +276,7 @@ class ProfileController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
-        $profile = Profile::find($id);
+        $profile = Profile::where('uuid', $id)->first();
 
         if (! $profile) {
             return response()->json([
@@ -319,24 +319,35 @@ class ProfileController extends Controller
     /**
      * @group Profiles
      *
-     * Supprimer un profil
+     * Supprimer son propre profil
      *
-     * Supprime un profil.
-     *
-     * @urlParam id integer required ID du profil. Example: 1
+     * Supprime le profil de l'utilisateur authentifié.
      *
      * @response 200 scenario="Profil supprimé" {
      *   "success": true,
-     *   "message": "Profil supprimé avec succès"
+     *   "message": "Votre profil a été supprimé avec succès"
      * }
      * @response 404 scenario="Profil non trouvé" {
      *   "success": false,
      *   "message": "Profil non trouvé"
      * }
+     * @response 403 scenario="Accès refusé" {
+     *   "success": false,
+     *   "message": "Vous ne pouvez supprimer que votre propre profil"
+     * }
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(Request $request): JsonResponse
     {
-        $profile = Profile::find($id);
+        $user = $request->user();
+
+        if (! $user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Utilisateur non authentifié',
+            ], 401);
+        }
+
+        $profile = $user->profile;
 
         if (! $profile) {
             return response()->json([
@@ -354,7 +365,7 @@ class ProfileController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Profil supprimé avec succès',
+            'message' => 'Votre profil a été supprimé avec succès',
         ]);
     }
 }

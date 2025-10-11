@@ -85,7 +85,7 @@ class PlanController extends Controller
      *
      * Récupère les détails d'un plan d'abonnement.
      *
-     * @urlParam id integer required ID du plan. Example: 1
+     * @urlParam id string required UUID du plan. Example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
      *
      * @response 200 scenario="Plan trouvé" {
      *   "success": true,
@@ -110,7 +110,7 @@ class PlanController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $plan = Plan::find($id);
+        $plan = Plan::where('uuid', $id)->first();
 
         if (!$plan) {
             return response()->json([

@@ -16,8 +16,12 @@ class MessageResource extends JsonResource
     {
         return [
             'id' => $this->uuid,
-            'conversation_id' => $this->when($this->conversation, $this->conversation->uuid),
-            'sender_id' => $this->when($this->sender, $this->sender->uuid),
+            'conversation_id' => $this->whenLoaded('conversation', function () {
+                return $this->conversation->uuid;
+            }),
+            'sender_id' => $this->whenLoaded('sender', function () {
+                return $this->sender->uuid;
+            }),
             'content' => $this->content,
             'is_read' => $this->is_read,
             'created_at' => $this->created_at,

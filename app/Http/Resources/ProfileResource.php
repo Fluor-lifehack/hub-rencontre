@@ -20,8 +20,12 @@ class ProfileResource extends JsonResource
             'bio' => $this->bio,
             'gender' => $this->gender,
             'age' => $this->age,
-            'country_id' => $this->when($this->country, $this->country->uuid),
-            'city_id' => $this->when($this->city, $this->city->id),
+            'country_id' => $this->whenLoaded('country', function () {
+                return $this->country->uuid;
+            }),
+            'city_id' => $this->whenLoaded('city', function () {
+                return $this->city->uuid;
+            }),
             'height' => $this->height,
             'hobbies' => $this->hobbies,
             'avatar' => $this->avatar,
@@ -33,9 +37,9 @@ class ProfileResource extends JsonResource
             'country' => new CountryResource($this->whenLoaded('country')),
             'city' => $this->whenLoaded('city', function () {
                 return [
-                    'id' => $this->city->id,
+                    'id' => $this->city->uuid,
                     'name' => $this->city->name,
-                    'country_id' => $this->city->country_id,
+                    'country_id' => $this->city->country->uuid,
                 ];
             }),
 

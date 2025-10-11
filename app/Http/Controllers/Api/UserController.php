@@ -183,7 +183,7 @@ class UserController extends Controller
      *
      * Récupère les détails d'un utilisateur avec son profil.
      *
-     * @urlParam id integer required ID de l'utilisateur. Example: 1
+     * @urlParam id string required UUID de l'utilisateur. Example: 40e35362-0215-45df-8afe-293778cb6ec7
      *
      * @response 200 scenario="Utilisateur trouvé" {
      *   "success": true,
@@ -223,7 +223,7 @@ class UserController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $user = User::with('profile')->find($id);
+        $user = User::where('uuid', $id)->with('profile')->first();
 
         if (! $user) {
             return response()->json([
@@ -245,7 +245,7 @@ class UserController extends Controller
      *
      * Met à jour les informations d'un utilisateur et de son profil.
      *
-     * @urlParam id integer required ID de l'utilisateur. Example: 1
+     * @urlParam id string required UUID de l'utilisateur. Example: 40e35362-0215-45df-8afe-293778cb6ec7
      *
      * @bodyParam name string Nom complet de l'utilisateur. Example: John Doe
      * @bodyParam email string Email de l'utilisateur. Example: john@example.com
@@ -297,7 +297,7 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
-        $user = User::find($id);
+        $user = User::where('uuid', $id)->first();
 
         if (! $user) {
             return response()->json([
@@ -340,37 +340,39 @@ class UserController extends Controller
     /**
      * @group Users
      *
-     * Supprimer un utilisateur
+     * Supprimer son propre compte
      *
-     * Supprime un utilisateur et son profil (soft delete).
+     * Supprime le compte de l'utilisateur authentifié (soft delete).
      *
-     * @urlParam id integer required ID de l'utilisateur. Example: 1
-     *
-     * @response 200 scenario="Utilisateur supprimé" {
+     * @response 200 scenario="Compte supprimé" {
      *   "success": true,
-     *   "message": "Utilisateur supprimé avec succès"
+     *   "message": "Votre compte a été supprimé avec succès"
      * }
      * @response 404 scenario="Utilisateur non trouvé" {
      *   "success": false,
      *   "message": "Utilisateur non trouvé"
      * }
+     * @response 403 scenario="Accès refusé" {
+     *   "success": false,
+     *   "message": "Vous ne pouvez supprimer que votre propre compte"
+     * }
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(Request $request): JsonResponse
     {
-        $user = User::find($id);
+        $user = $request->user();
 
         if (! $user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Utilisateur non trouvé',
-            ], 404);
+                'message' => 'Utilisateur non authentifié',
+            ], 401);
         }
 
         $user->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Utilisateur supprimé avec succès',
+            'message' => 'Votre compte a été supprimé avec succès',
         ]);
     }
 }

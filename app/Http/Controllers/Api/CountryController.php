@@ -72,7 +72,7 @@ class CountryController extends Controller
      *
      * Récupère les détails d'un pays avec ses villes.
      *
-     * @urlParam id integer required ID du pays. Example: 1
+     * @urlParam id string required UUID du pays. Example: 3fe609a4-a037-4dab-adca-6c8e94a242c4
      *
      * @response 200 scenario="Pays trouvé" {
      *   "success": true,
@@ -99,7 +99,7 @@ class CountryController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $country = Country::with('cities')->find($id);
+        $country = Country::where('uuid', $id)->with('cities')->first();
 
         if (! $country) {
             return response()->json([

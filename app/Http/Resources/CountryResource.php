@@ -25,9 +25,9 @@ class CountryResource extends JsonResource
             'cities' => $this->whenLoaded('cities', function () {
                 return $this->cities->map(function ($city) {
                     return [
-                        'id' => $city->id,
+                        'id' => $city->uuid,
                         'name' => $city->name,
-                        'country_id' => $city->country_id,
+                        'country_id' => $city->country->uuid,
                     ];
                 });
             }),
