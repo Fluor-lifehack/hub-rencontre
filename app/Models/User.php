@@ -113,6 +113,21 @@ class User extends Authenticatable
         return $this->hasMany(UserMatch::class, 'matched_user_id');
     }
 
+    // Récupère les utilisateurs qui ont liké ce profil
+    public function likesReceived()
+    {
+        return $this->hasMany(UserMatch::class, 'matched_user_id')
+            ->where('is_mutual', false); // Seulement les likes non mutuels
+    }
+
+    // Récupère les utilisateurs qui ont liké ce profil (avec leurs profils)
+    public function likers()
+    {
+        return $this->belongsToMany(User::class, 'matches', 'matched_user_id', 'user_id')
+            ->wherePivot('is_mutual', false)
+            ->withPivot(['compatibility_score', 'is_mutual', 'created_at', 'updated_at']);
+    }
+
     public function blocksAsBlocker()
     {
         return $this->hasMany(Block::class, 'blocker_id');

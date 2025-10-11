@@ -42,6 +42,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/users/{id}', [UserController::class, 'show']);
         Route::put('/users/{id}', [UserController::class, 'update']);
         Route::delete('/users/me', [UserController::class, 'destroy']); // Suppression de son propre compte
+        Route::get('/users/me/likes-received', [UserController::class, 'likesReceived']); // Likes reçus
 
         // Profils
         Route::get('/profiles', [ProfileController::class, 'index']);

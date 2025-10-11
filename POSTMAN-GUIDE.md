@@ -52,6 +52,7 @@ Cette collection Postman contient toutes les routes de l'API Rencontre Hub, opti
 - **POST** `/api/v1/users` - Créer un utilisateur
 - **GET** `/api/v1/users/{id}` - Détails d'un utilisateur
 - **PUT** `/api/v1/users/{id}` - Modifier un utilisateur
+- **💕 GET** `/api/v1/users/me/likes-received` - **Likes reçus par l'utilisateur**
 - **🗑️ DELETE** `/api/v1/users/me` - **Supprimer son propre compte**
 
 ### 👤 Profils
@@ -178,6 +179,47 @@ if (pm.response && pm.response.json && pm.response.json.data && pm.response.json
 {
     "matched_user_id": "46b67f53-eeaf-406e-bc87-af4f4e4bea0f",
     "compatibility_score": 85
+}
+```
+
+### Récupérer les likes reçus
+**GET** `/api/v1/users/me/likes-received`
+
+**Paramètres de requête :**
+- `per_page` : Nombre d'éléments par page (max 50, défaut: 15)
+- `mutual_only` : Afficher seulement les likes mutuels (true/false)
+- `page` : Numéro de page (défaut: 1)
+
+**Exemple de réponse :**
+```json
+{
+    "success": true,
+    "data": {
+        "data": [
+            {
+                "id": "uuid-du-like",
+                "liker_id": "uuid-du-liker",
+                "compatibility_score": 85,
+                "is_mutual": false,
+                "liked_at": "2025-10-11T12:00:00.000000Z",
+                "liker": {
+                    "id": "uuid-du-liker",
+                    "name": "Marie Dupont",
+                    "profile": {
+                        "bio": "Passionnée de voyage",
+                        "age": 28,
+                        "gender": "female",
+                        "avatar": "avatars/marie.jpg"
+                    }
+                },
+                "compatibility_level": "Très élevée",
+                "time_ago": "il y a 2 heures",
+                "is_recent": true
+            }
+        ],
+        "current_page": 1,
+        "total": 5
+    }
 }
 ```
 

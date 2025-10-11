@@ -23,11 +23,6 @@ class UserForm
                     ->tel()
                     ->default(null),
                 DateTimePicker::make('email_verified_at'),
-                TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->minLength(6)
-                    ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
                 Toggle::make('is_certified')
                     ->required(),
                 DateTimePicker::make('last_login_at'),

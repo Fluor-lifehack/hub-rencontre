@@ -253,6 +253,46 @@
                         },
                         "description": "Supprimer son propre compte (soft delete)"
                     }
+                },
+                {
+                    "name": "Likes reçus",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/users/me/likes-received?per_page=15&mutual_only=false",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "users", "me", "likes-received"],
+                            "query": [
+                                {
+                                    "key": "per_page",
+                                    "value": "15",
+                                    "description": "Nombre d'éléments par page (max 50)"
+                                },
+                                {
+                                    "key": "mutual_only",
+                                    "value": "false",
+                                    "description": "Afficher seulement les likes mutuels"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1",
+                                    "description": "Numéro de page",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Récupérer la liste des utilisateurs qui ont liké votre profil"
+                    }
                 }
             ]
         },

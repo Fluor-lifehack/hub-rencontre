@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\LikeReceivedResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -373,6 +374,81 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Votre compte a été supprimé avec succès',
+        ]);
+    }
+
+    /**
+     * @group Users
+     *
+     * Likes reçus par l'utilisateur
+     *
+     * Récupère la liste des utilisateurs qui ont liké le profil de l'utilisateur authentifié.
+     *
+     * @queryParam page integer Numéro de page. Example: 1
+     * @queryParam per_page integer Nombre d'éléments par page (max 50). Example: 15
+     * @queryParam mutual_only boolean Afficher seulement les likes mutuels. Example: false
+     *
+     * @response 200 scenario="Likes récupérés" {
+     *   "success": true,
+     *   "data": {
+     *     "data": [
+     *       {
+     *         "id": "uuid-du-like",
+     *         "liker_id": "uuid-du-liker",
+     *         "compatibility_score": 85,
+     *         "is_mutual": false,
+     *         "liked_at": "2025-10-11T12:00:00.000000Z",
+     *         "liker": {
+     *           "id": "uuid-du-liker",
+     *           "name": "Marie Dupont",
+     *           "profile": {
+     *             "bio": "Passionnée de voyage",
+     *             "age": 28,
+     *             "gender": "female"
+     *           }
+     *         },
+     *         "compatibility_level": "Très élevée",
+     *         "time_ago": "il y a 2 heures",
+     *         "is_recent": true
+     *       }
+     *     ],
+     *     "current_page": 1,
+     *     "total": 5
+     *   }
+     * }
+     * @response 401 scenario="Non authentifié" {
+     *   "success": false,
+     *   "message": "Non authentifié"
+     * }
+     */
+    public function likesReceived(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Non authentifié',
+            ], 401);
+        }
+
+        $perPage = min($request->get('per_page', 15), 50);
+        $mutualOnly = $request->boolean('mutual_only', false);
+
+        // Construire la requête
+        $query = $user->likesReceived()
+            ->with(['user.profile.country', 'user.profile.city', 'user.photos']);
+
+        // Filtrer par correspondance mutuelle si demandé
+        if ($mutualOnly) {
+            $query->where('is_mutual', true);
+        }
+
+        $likes = $query->orderBy('created_at', 'desc')->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => LikeReceivedResource::collection($likes),
         ]);
     }
 }
