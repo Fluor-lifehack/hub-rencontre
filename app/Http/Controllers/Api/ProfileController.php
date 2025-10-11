@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProfileResource;
 use App\Models\Profile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -97,7 +98,7 @@ class ProfileController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $profiles,
+            'data' => ProfileResource::collection($profiles),
         ]);
     }
 
@@ -164,7 +165,7 @@ class ProfileController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Profil créé avec succès',
-            'data' => $profile,
+            'data' => new ProfileResource($profile),
         ], 201);
     }
 
@@ -227,7 +228,7 @@ class ProfileController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $profile,
+            'data' => new ProfileResource($profile),
         ]);
     }
 
@@ -311,7 +312,7 @@ class ProfileController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Profil mis à jour avec succès',
-            'data' => $profile,
+            'data' => new ProfileResource($profile),
         ]);
     }
 

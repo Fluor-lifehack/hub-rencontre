@@ -1,19 +1,16 @@
-name: Countries
+name: Autres
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/countries
+    uri: api/v1/login
     metadata:
-      groupName: Countries
+      groupName: Autres
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: |-
-        Liste des pays
-
-        Récupère la liste paginée des pays avec leurs villes.
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -23,80 +20,20 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters:
-      page:
-        name: page
-        description: 'Numéro de page.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      per_page:
-        name: per_page
-        description: "Nombre d'éléments par page (max 50)."
-        required: false
-        example: 15
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      search:
-        name: search
-        description: 'Recherche par nom de pays.'
-        required: false
-        example: Côte
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      code:
-        name: code
-        description: 'Filtrer par code ISO.'
-        required: false
-        example: CIV
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanQueryParameters:
-      page: 1
-      per_page: 15
-      search: Côte
-      code: CIV
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 200
-        content: |-
-          {
-            "success": true,
-            "data": {
-              "data": [
-                {
-                  "id": 1,
-                  "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
-                  "name": "Côte d'Ivoire",
-                  "code": "CIV",
-                  "created_at": "2025-10-10T15:30:00.000000Z",
-                  "updated_at": "2025-10-10T15:30:00.000000Z",
-                  "cities_count": 50
-                }
-              ],
-              "current_page": 1,
-              "per_page": 15,
-              "total": 100
-            }
-          }
-        headers: []
-        description: 'Liste récupérée'
+        status: 401
+        content: '{"success":false,"message":"Authentification requise. Utilisez POST \/api\/v1\/auth\/login","login_url":"\/api\/v1\/auth\/login"}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
         custom: []
     responseFields: []
     auth: []
@@ -107,95 +44,13 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/countries/{id}'
+    uri: api/v1/user
     metadata:
-      groupName: Countries
+      groupName: Autres
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: |-
-        Détails d'un pays
-
-        Récupère les détails d'un pays avec ses villes.
-      description: ''
-      authenticated: false
-      deprecated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID du pays.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-            "success": true,
-            "data": {
-              "id": 1,
-              "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
-              "name": "Côte d'Ivoire",
-              "code": "CIV",
-              "created_at": "2025-10-10T15:30:00.000000Z",
-              "updated_at": "2025-10-10T15:30:00.000000Z",
-              "cities": [
-                {
-                  "id": 1,
-                  "name": "Abidjan",
-                  "created_at": "2025-10-10T15:30:00.000000Z"
-                }
-              ]
-            }
-          }
-        headers: []
-        description: 'Pays trouvé'
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-            "success": false,
-            "message": "Pays non trouvé"
-          }
-        headers: []
-        description: 'Pays non trouvé'
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/countries
-    metadata:
-      groupName: Countries
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Créer un pays
-
-        Crée un nouveau pays.
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -207,219 +62,18 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      name:
-        name: name
-        description: 'Nom du pays.'
-        required: true
-        example: "Côte d'Ivoire"
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      code:
-        name: code
-        description: 'Code ISO du pays (3 caractères).'
-        required: true
-        example: CIV
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      name: "Côte d'Ivoire"
-      code: CIV
-    fileParameters: []
-    responses:
-      -
-        status: 201
-        content: |-
-          {
-            "success": true,
-            "message": "Pays créé avec succès",
-            "data": {
-              "id": 1,
-              "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
-              "name": "Côte d'Ivoire",
-              "code": "CIV",
-              "created_at": "2025-10-10T15:30:00.000000Z",
-              "updated_at": "2025-10-10T15:30:00.000000Z"
-            }
-          }
-        headers: []
-        description: 'Pays créé'
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - PUT
-    uri: 'api/v1/countries/{id}'
-    metadata:
-      groupName: Countries
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Mettre à jour un pays
-
-        Met à jour les informations d'un pays.
-      description: ''
-      authenticated: false
-      deprecated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID du pays.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      name:
-        name: name
-        description: 'Nom du pays.'
-        required: false
-        example: "Côte d'Ivoire"
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      code:
-        name: code
-        description: 'Code ISO du pays (3 caractères).'
-        required: false
-        example: CIV
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      name: "Côte d'Ivoire"
-      code: CIV
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-            "success": true,
-            "message": "Pays mis à jour avec succès",
-            "data": {
-              "id": 1,
-              "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
-              "name": "Côte d'Ivoire",
-              "code": "CIV",
-              "created_at": "2025-10-10T15:30:00.000000Z",
-              "updated_at": "2025-10-10T15:30:00.000000Z"
-            }
-          }
-        headers: []
-        description: 'Pays mis à jour'
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-            "success": false,
-            "message": "Pays non trouvé"
-          }
-        headers: []
-        description: 'Pays non trouvé'
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/countries/{id}'
-    metadata:
-      groupName: Countries
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Supprimer un pays
-
-        Supprime un pays (seulement s'il n'a pas de villes).
-      description: ''
-      authenticated: false
-      deprecated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID du pays.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 200
-        content: |-
-          {
-            "success": true,
-            "message": "Pays supprimé avec succès"
-          }
-        headers: []
-        description: 'Pays supprimé'
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-            "success": false,
-            "message": "Pays non trouvé"
-          }
-        headers: []
-        description: 'Pays non trouvé'
-        custom: []
-      -
-        status: 422
-        content: |-
-          {
-            "success": false,
-            "message": "Impossible de supprimer un pays qui contient des villes"
-          }
-        headers: []
-        description: 'Pays avec des villes'
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
         custom: []
     responseFields: []
     auth: []

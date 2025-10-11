@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MatchResource;
 use App\Models\UserMatch;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -75,7 +76,7 @@ class MatchController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $matches,
+            'data' => MatchResource::collection($matches),
         ]);
     }
 
@@ -132,7 +133,7 @@ class MatchController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Correspondance créée avec succès',
-            'data' => $match,
+            'data' => new MatchResource($match),
         ], 201);
     }
 
@@ -187,7 +188,7 @@ class MatchController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $match,
+            'data' => new MatchResource($match),
         ]);
     }
 
@@ -243,7 +244,7 @@ class MatchController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Correspondance mise à jour avec succès',
-            'data' => $match,
+            'data' => new MatchResource($match),
         ]);
     }
 

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PhotoResource;
 use App\Models\Photo;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class PhotoController extends Controller
 {
@@ -64,7 +65,7 @@ class PhotoController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $photos,
+            'data' => PhotoResource::collection($photos),
         ]);
     }
 
@@ -102,7 +103,7 @@ class PhotoController extends Controller
         ]);
 
         $photoFile = $request->file('photo');
-        $path = $photoFile->store('photos/user' . $request->user_id, 'public');
+        $path = $photoFile->store('photos/user'.$request->user_id, 'public');
 
         $photo = Photo::create([
             'user_id' => $request->user_id,
@@ -113,7 +114,7 @@ class PhotoController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Photo uploadée avec succès',
-            'data' => $photo,
+            'data' => new PhotoResource($photo),
         ], 201);
     }
 
@@ -143,7 +144,6 @@ class PhotoController extends Controller
      *     }
      *   }
      * }
-     *
      * @response 404 scenario="Photo non trouvée" {
      *   "success": false,
      *   "message": "Photo non trouvée"
@@ -153,7 +153,7 @@ class PhotoController extends Controller
     {
         $photo = Photo::with('user')->find($id);
 
-        if (!$photo) {
+        if (! $photo) {
             return response()->json([
                 'success' => false,
                 'message' => 'Photo non trouvée',
@@ -162,7 +162,7 @@ class PhotoController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $photo,
+            'data' => new PhotoResource($photo),
         ]);
     }
 
@@ -174,6 +174,7 @@ class PhotoController extends Controller
      * Met à jour les informations d'une photo.
      *
      * @urlParam id integer required ID de la photo. Example: 1
+     *
      * @bodyParam is_profile boolean Photo de profil. Example: true
      *
      * @response 200 scenario="Photo mise à jour" {
@@ -189,7 +190,6 @@ class PhotoController extends Controller
      *     "updated_at": "2025-10-10T15:30:00.000000Z"
      *   }
      * }
-     *
      * @response 404 scenario="Photo non trouvée" {
      *   "success": false,
      *   "message": "Photo non trouvée"
@@ -199,7 +199,7 @@ class PhotoController extends Controller
     {
         $photo = Photo::find($id);
 
-        if (!$photo) {
+        if (! $photo) {
             return response()->json([
                 'success' => false,
                 'message' => 'Photo non trouvée',
@@ -215,7 +215,7 @@ class PhotoController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Photo mise à jour avec succès',
-            'data' => $photo,
+            'data' => new PhotoResource($photo),
         ]);
     }
 
@@ -232,7 +232,6 @@ class PhotoController extends Controller
      *   "success": true,
      *   "message": "Photo supprimée avec succès"
      * }
-     *
      * @response 404 scenario="Photo non trouvée" {
      *   "success": false,
      *   "message": "Photo non trouvée"
@@ -242,7 +241,7 @@ class PhotoController extends Controller
     {
         $photo = Photo::find($id);
 
-        if (!$photo) {
+        if (! $photo) {
             return response()->json([
                 'success' => false,
                 'message' => 'Photo non trouvée',

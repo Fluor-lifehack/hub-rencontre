@@ -1,16 +1,19 @@
-name: Autres
+name: Photos
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/user
+    uri: api/v1/photos
     metadata:
-      groupName: Autres
+      groupName: Photos
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: |-
+        Liste des photos
+
+        Récupère la liste paginée des photos d'un utilisateur.
       description: ''
       authenticated: false
       deprecated: false
@@ -20,6 +23,125 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: 'Numéro de page.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: "Nombre d'éléments par page (max 50)."
+        required: false
+        example: 15
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      user_id:
+        name: user_id
+        description: 'Filtrer par utilisateur.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      is_profile:
+        name: is_profile
+        description: 'Filtrer par photo de profil.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      per_page: 15
+      user_id: 1
+      is_profile: true
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "data": [
+                {
+                  "id": 1,
+                  "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
+                  "user_id": 1,
+                  "path": "photos/user1/photo1.jpg",
+                  "is_profile": true,
+                  "created_at": "2025-10-10T15:30:00.000000Z",
+                  "updated_at": "2025-10-10T15:30:00.000000Z",
+                  "user": {
+                    "id": 1,
+                    "name": "John Doe",
+                    "email": "john@example.com"
+                  }
+                }
+              ],
+              "current_page": 1,
+              "per_page": 15,
+              "total": 10
+            }
+          }
+        headers: []
+        description: 'Liste récupérée'
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/photos/{id}'
+    metadata:
+      groupName: Photos
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Détails d'une photo
+
+        Récupère les détails d'une photo.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la photo.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -27,13 +149,188 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "id": 1,
+              "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
+              "user_id": 1,
+              "path": "photos/user1/photo1.jpg",
+              "is_profile": true,
+              "created_at": "2025-10-10T15:30:00.000000Z",
+              "updated_at": "2025-10-10T15:30:00.000000Z",
+              "user": {
+                "id": 1,
+                "name": "John Doe",
+                "email": "john@example.com"
+              }
+            }
+          }
+        headers: []
+        description: 'Photo trouvée'
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Photo non trouvée"
+          }
+        headers: []
+        description: 'Photo non trouvée'
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/photos/{id}'
+    metadata:
+      groupName: Photos
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Mettre à jour une photo
+
+        Met à jour les informations d'une photo.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la photo.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      is_profile:
+        name: is_profile
+        description: 'Photo de profil.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      is_profile: true
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Photo mise à jour avec succès",
+            "data": {
+              "id": 1,
+              "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
+              "user_id": 1,
+              "path": "photos/user1/photo1.jpg",
+              "is_profile": true,
+              "created_at": "2025-10-10T15:30:00.000000Z",
+              "updated_at": "2025-10-10T15:30:00.000000Z"
+            }
+          }
+        headers: []
+        description: 'Photo mise à jour'
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Photo non trouvée"
+          }
+        headers: []
+        description: 'Photo non trouvée'
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/photos/{id}'
+    metadata:
+      groupName: Photos
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Supprimer une photo
+
+        Supprime une photo et le fichier associé.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'ID de la photo.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Photo supprimée avec succès"
+          }
+        headers: []
+        description: 'Photo supprimée'
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Photo non trouvée"
+          }
+        headers: []
+        description: 'Photo non trouvée'
         custom: []
     responseFields: []
     auth: []

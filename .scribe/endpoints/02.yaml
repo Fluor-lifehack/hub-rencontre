@@ -1,19 +1,19 @@
-name: Plans
+name: Countries
 description: ''
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/plans
+    uri: api/v1/countries
     metadata:
-      groupName: Plans
+      groupName: Countries
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Liste des plans d'abonnement
+        Liste des pays
 
-        Récupère la liste paginée des plans d'abonnement.
+        Récupère la liste paginée des pays avec leurs villes.
       description: ''
       authenticated: false
       deprecated: false
@@ -46,39 +46,19 @@ endpoints:
         custom: []
       search:
         name: search
-        description: 'Recherche par nom de plan.'
+        description: 'Recherche par nom de pays.'
         required: false
-        example: Premium
+        example: Côte
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         custom: []
-      tag:
-        name: tag
-        description: 'Filtrer par tag.'
+      code:
+        name: code
+        description: 'Filtrer par code ISO.'
         required: false
-        example: premium
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      price_min:
-        name: price_min
-        description: 'decimal Prix minimum.'
-        required: false
-        example: '0.00'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      price_max:
-        name: price_max
-        description: 'decimal Prix maximum.'
-        required: false
-        example: '50.00'
+        example: CIV
         type: string
         enumValues: []
         exampleWasSpecified: true
@@ -87,10 +67,8 @@ endpoints:
     cleanQueryParameters:
       page: 1
       per_page: 15
-      search: Premium
-      tag: premium
-      price_min: '0.00'
-      price_max: '50.00'
+      search: Côte
+      code: CIV
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -105,19 +83,16 @@ endpoints:
                 {
                   "id": 1,
                   "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
-                  "name": "Premium",
-                  "description": "Plan premium avec fonctionnalités avancées",
-                  "price": 19.99,
-                  "duration_days": 30,
-                  "tag": "premium",
-                  "advantages": ["Messages illimités", "Recherche avancée", "Profil en vedette"],
+                  "name": "Côte d'Ivoire",
+                  "code": "CIV",
                   "created_at": "2025-10-10T15:30:00.000000Z",
-                  "updated_at": "2025-10-10T15:30:00.000000Z"
+                  "updated_at": "2025-10-10T15:30:00.000000Z",
+                  "cities_count": 50
                 }
               ],
               "current_page": 1,
               "per_page": 15,
-              "total": 10
+              "total": 100
             }
           }
         headers: []
@@ -132,16 +107,16 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/plans/{id}'
+    uri: 'api/v1/countries/{id}'
     metadata:
-      groupName: Plans
+      groupName: Countries
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
       title: |-
-        Détails d'un plan
+        Détails d'un pays
 
-        Récupère les détails d'un plan d'abonnement.
+        Récupère les détails d'un pays avec ses villes.
       description: ''
       authenticated: false
       deprecated: false
@@ -152,7 +127,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'ID du plan.'
+        description: 'ID du pays.'
         required: true
         example: 1
         type: integer
@@ -176,376 +151,31 @@ endpoints:
             "data": {
               "id": 1,
               "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
-              "name": "Premium",
-              "description": "Plan premium avec fonctionnalités avancées",
-              "price": 19.99,
-              "duration_days": 30,
-              "tag": "premium",
-              "advantages": ["Messages illimités", "Recherche avancée", "Profil en vedette"],
+              "name": "Côte d'Ivoire",
+              "code": "CIV",
               "created_at": "2025-10-10T15:30:00.000000Z",
-              "updated_at": "2025-10-10T15:30:00.000000Z"
+              "updated_at": "2025-10-10T15:30:00.000000Z",
+              "cities": [
+                {
+                  "id": 1,
+                  "name": "Abidjan",
+                  "created_at": "2025-10-10T15:30:00.000000Z"
+                }
+              ]
             }
           }
         headers: []
-        description: 'Plan trouvé'
+        description: 'Pays trouvé'
         custom: []
       -
         status: 404
         content: |-
           {
             "success": false,
-            "message": "Plan non trouvé"
+            "message": "Pays non trouvé"
           }
         headers: []
-        description: 'Plan non trouvé'
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/plans
-    metadata:
-      groupName: Plans
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Créer un plan d'abonnement
-
-        Crée un nouveau plan d'abonnement.
-      description: ''
-      authenticated: false
-      deprecated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      name:
-        name: name
-        description: 'Nom du plan.'
-        required: true
-        example: Premium
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      description:
-        name: description
-        description: 'Description du plan.'
-        required: false
-        example: 'Plan premium avec fonctionnalités avancées'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        custom: []
-      price:
-        name: price
-        description: 'Prix du plan.'
-        required: true
-        example: '19.99'
-        type: decimal
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      duration_days:
-        name: duration_days
-        description: 'Durée en jours.'
-        required: true
-        example: 30
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      tag:
-        name: tag
-        description: 'Tag du plan.'
-        required: false
-        example: premium
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        custom: []
-      advantages:
-        name: advantages
-        description: 'Avantages du plan.'
-        required: false
-        example:
-          - 'Messages illimités'
-          - 'Recherche avancée'
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      name: Premium
-      description: 'Plan premium avec fonctionnalités avancées'
-      price: '19.99'
-      duration_days: 30
-      tag: premium
-      advantages:
-        - 'Messages illimités'
-        - 'Recherche avancée'
-    fileParameters: []
-    responses:
-      -
-        status: 201
-        content: |-
-          {
-            "success": true,
-            "message": "Plan créé avec succès",
-            "data": {
-              "id": 1,
-              "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
-              "name": "Premium",
-              "description": "Plan premium avec fonctionnalités avancées",
-              "price": 19.99,
-              "duration_days": 30,
-              "tag": "premium",
-              "advantages": ["Messages illimités", "Recherche avancée", "Profil en vedette"],
-              "created_at": "2025-10-10T15:30:00.000000Z",
-              "updated_at": "2025-10-10T15:30:00.000000Z"
-            }
-          }
-        headers: []
-        description: 'Plan créé'
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - PUT
-    uri: 'api/v1/plans/{id}'
-    metadata:
-      groupName: Plans
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Mettre à jour un plan
-
-        Met à jour les informations d'un plan d'abonnement.
-      description: ''
-      authenticated: false
-      deprecated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID du plan.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      name:
-        name: name
-        description: 'Nom du plan.'
-        required: false
-        example: Premium
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      description:
-        name: description
-        description: 'Description du plan.'
-        required: false
-        example: 'Plan premium avec fonctionnalités avancées'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        custom: []
-      price:
-        name: price
-        description: 'Prix du plan.'
-        required: false
-        example: '19.99'
-        type: decimal
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      duration_days:
-        name: duration_days
-        description: 'Durée en jours.'
-        required: false
-        example: 30
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      tag:
-        name: tag
-        description: 'Tag du plan.'
-        required: false
-        example: premium
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        custom: []
-      advantages:
-        name: advantages
-        description: 'Avantages du plan.'
-        required: false
-        example:
-          - 'Messages illimités'
-          - 'Recherche avancée'
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      name: Premium
-      description: 'Plan premium avec fonctionnalités avancées'
-      price: '19.99'
-      duration_days: 30
-      tag: premium
-      advantages:
-        - 'Messages illimités'
-        - 'Recherche avancée'
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-            "success": true,
-            "message": "Plan mis à jour avec succès",
-            "data": {
-              "id": 1,
-              "uuid": "3fe609a4-a037-4dab-adca-6c8e94a242c4",
-              "name": "Premium",
-              "description": "Plan premium avec fonctionnalités avancées",
-              "price": 19.99,
-              "duration_days": 30,
-              "tag": "premium",
-              "advantages": ["Messages illimités", "Recherche avancée", "Profil en vedette"],
-              "created_at": "2025-10-10T15:30:00.000000Z",
-              "updated_at": "2025-10-10T15:30:00.000000Z"
-            }
-          }
-        headers: []
-        description: 'Plan mis à jour'
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-            "success": false,
-            "message": "Plan non trouvé"
-          }
-        headers: []
-        description: 'Plan non trouvé'
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/plans/{id}'
-    metadata:
-      groupName: Plans
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: |-
-        Supprimer un plan
-
-        Supprime un plan d'abonnement (seulement s'il n'a pas d'abonnements actifs).
-      description: ''
-      authenticated: false
-      deprecated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'ID du plan.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |-
-          {
-            "success": true,
-            "message": "Plan supprimé avec succès"
-          }
-        headers: []
-        description: 'Plan supprimé'
-        custom: []
-      -
-        status: 404
-        content: |-
-          {
-            "success": false,
-            "message": "Plan non trouvé"
-          }
-        headers: []
-        description: 'Plan non trouvé'
-        custom: []
-      -
-        status: 422
-        content: |-
-          {
-            "success": false,
-            "message": "Impossible de supprimer un plan qui a des abonnements actifs"
-          }
-        headers: []
-        description: 'Plan avec des abonnements'
+        description: 'Pays non trouvé'
         custom: []
     responseFields: []
     auth: []

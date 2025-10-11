@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -67,7 +68,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $users,
+            'data' => UserResource::collection($users),
         ]);
     }
 
@@ -166,13 +167,12 @@ class UserController extends Controller
             'hobbies' => $request->hobbies,
         ]);
 
+        $user->load('profile');
+
         return response()->json([
             'success' => true,
             'message' => 'Utilisateur créé avec succès',
-            'data' => [
-                'user' => $user,
-                'profile' => $profile,
-            ],
+            'data' => new UserResource($user),
         ], 201);
     }
 
@@ -234,10 +234,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'user' => $user,
-                'profile' => $user->profile,
-            ],
+            'data' => new UserResource($user),
         ]);
     }
 
@@ -336,10 +333,7 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Utilisateur mis à jour avec succès',
-            'data' => [
-                'user' => $user,
-                'profile' => $user->profile,
-            ],
+            'data' => new UserResource($user),
         ]);
     }
 
